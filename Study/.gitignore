@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# 排除的文档
+docs/chat-record.md
+docs/OUTLINE.md
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Node
+node_modules/
+
+# 其他工作区目录（如果不需要）
+# apps/
+# suAgents/
