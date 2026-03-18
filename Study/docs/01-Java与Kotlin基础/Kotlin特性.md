@@ -1,5 +1,28 @@
 # Kotlin特性
 
+## 速记总结
+
+### 一句话理解
+> Kotlin 是 Java 的"语法糖加工厂"——扩展函数(不修改类就加方法)、空安全(编译器帮你判空)、协程(用同步写法做异步)都是让代码更简洁安全。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 扩展函数 | 编译后变静态方法,接收者做第一个参数,静态分发无多态 | ★★★★★ |
+| 空安全 | ?.(安全调用) ?:(Elvis) !!(强制非空),编译器插入null检查 | ★★★★★ |
+| 内联函数 | inline消除Lambda对象开销,noinline/crossinline控制内联范围 | ★★★★☆ |
+| 委托属性 | by lazy(懒加载)、by Delegates.observable(监听变化) | ★★★★☆ |
+| 密封类 | sealed class限制子类范围,when表达式不用else | ★★★★☆ |
+| 数据类 | data class自动生成equals/hashCode/toString/copy | ★★★☆☆ |
+| 作用域函数 | let/run/with/apply/also — 记忆:对象引用(this/it)+返回值 | ★★★★☆ |
+
+### 与其他知识的串联
+- **扩展函数编译原理 → 字节码理解**：扩展函数编译后是静态方法，面试常考"扩展函数能否重写"(不能,静态分发)
+- **by lazy → 线程安全单例**：LazyThreadSafetyMode.SYNCHRONIZED 实现线程安全懒加载，等效于DCL单例
+- **密封类 → MVI状态管理**：sealed class/interface 天然适合定义UI状态(Loading/Success/Error)和用户意图(Intent)
+
+---
+
 ## 1. 概述
 
 Kotlin 是一门现代化的编程语言，提供了许多强大的特性来提高开发效率和代码质量。本文将深入讲解 Kotlin 的核心特性，包括扩展函数、内联函数、空安全、委托属性、密封类等，以及它们的实现原理。

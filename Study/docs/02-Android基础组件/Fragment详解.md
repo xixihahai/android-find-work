@@ -1,4 +1,22 @@
 # Fragment 详解
+## 速记总结
+
+### 一句话理解
+> Fragment 就像一个**可复用的 UI 积木**，可以组合在不同 Activity 中，适配手机和平板
+
+### 核心要点速记
+| 要点 | 一句话记忆 |
+|------|-----------|
+| 生命周期 | 比 Activity 多 onAttach/onCreateView/onDestroyView/onDetach |
+| 通信方式 | ViewModel 共享数据（推荐）、FragmentResult API、接口回调 |
+| 懒加载 | ViewPager2 + setMaxLifecycle 替代旧的 setUserVisibleHint |
+| Navigation | Jetpack 推荐的 Fragment 导航方案 |
+| commit vs commitAllowingStateLoss | onSaveInstanceState 后 commit 会崩溃 |
+
+### 与其他组件的关系
+- Fragment 必须依附于 Activity；嵌套 Fragment 用 childFragmentManager
+
+---
 
 ## 1. 概述
 

@@ -1,4 +1,22 @@
 # Intent 与 IPC 机制
+## 速记总结
+
+### 一句话理解
+> Intent 是组件之间的**信使**，Binder 是跨进程通信的**高速公路**
+
+### 核心要点速记
+| 要点 | 一句话记忆 |
+|------|-----------|
+| 显式 vs 隐式 | 显式：指名道姓找人；隐式：按条件海选（action+category+data） |
+| Binder 原理 | 一次拷贝（mmap），比 Socket/管道（两次拷贝）快 |
+| AIDL | 跨进程接口定义语言，编译时生成 Proxy/Stub 代码 |
+| Bundle 限制 | 传输数据不超过 1MB（Binder 缓冲区限制） |
+| IPC 方式选择 | Bundle(简单) → Messenger(串行) → AIDL(并发) → ContentProvider(CRUD) |
+
+### 与其他组件的关系
+- 四大组件的启动都通过 Intent；跨进程通信底层都是 Binder
+
+---
 
 ## 1. 概述
 

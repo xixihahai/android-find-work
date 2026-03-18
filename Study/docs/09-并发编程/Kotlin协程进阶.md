@@ -1,5 +1,28 @@
 # Kotlin 协程进阶
 
+## 速记总结
+
+### 一句话理解
+> 协程进阶三大主题——结构化并发(父取消子全取消)、异常传播(SupervisorJob单向隔离)、Channel/Flow(协程间通信)。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 结构化并发 | 父协程取消→所有子协程取消；子协程异常→传播到父协程(默认行为) | ★★★★★ |
+| SupervisorJob | 子协程失败不影响兄弟协程，supervisorScope内每个子协程独立 | ★★★★★ |
+| CoroutineScope | viewModelScope/lifecycleScope自动绑定生命周期，组件销毁自动取消 | ★★★★★ |
+| 异常处理 | CoroutineExceptionHandler只在根协程生效；launch抛异常，async在await时抛 | ★★★★☆ |
+| Channel | 协程间通信的管道，支持缓冲(BUFFERED/CONFLATED/UNLIMITED)，热流 | ★★★★☆ |
+| Flow背压 | buffer(缓冲)、conflate(合并丢弃旧值)、collectLatest(取消旧收集) | ★★★★★ |
+| StateFlow/SharedFlow | StateFlow=有初始值的热流(替代LiveData)；SharedFlow=无初始值可配置重放 | ★★★★★ |
+
+### 与其他知识的串联
+- **viewModelScope → ViewModel+Lifecycle(组件销毁自动取消)**：ViewModel.onCleared时cancel viewModelScope
+- **SupervisorJob → supervisorScope(一个子协程失败不影响其他)**：适合并行请求场景，一个接口失败不影响其他
+- **Channel → 生产者消费者模式(替代Handler消息队列)**：Channel可实现类似Handler的消息传递，但更灵活支持挂起
+
+---
+
 ## 1. 概述
 
 本文深入探讨 Kotlin 协程的高级特性，包括结构化并发、异常处理、Channel、Flow 背压等进阶内容。

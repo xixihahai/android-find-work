@@ -1,5 +1,28 @@
 # Kotlin协程原理
 
+## 速记总结
+
+### 一句话理解
+> 协程就像轻量级线程——挂起时不占线程(状态保存在Continuation里)，恢复时跳回来继续执行，本质是CPS变换+状态机。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 挂起原理 | suspend函数编译后多一个Continuation参数(CPS变换) | ★★★★★ |
+| 状态机 | 每个挂起点是一个状态(label),用switch-case跳转 | ★★★★★ |
+| Dispatcher | Main(主线程)、IO(64线程)、Default(CPU核数)、Unconfined | ★★★★☆ |
+| 协程构建器 | launch(不返回) vs async(返回Deferred) vs runBlocking(阻塞) | ★★★★★ |
+| 结构化并发 | 父协程取消→子协程全部取消，子协程异常→父协程取消 | ★★★★★ |
+| 异常处理 | launch用CoroutineExceptionHandler,async在await时抛出 | ★★★★☆ |
+| SupervisorJob | 子协程失败不影响兄弟协程(隔离异常传播) | ★★★☆☆ |
+
+### 与其他知识的串联
+- **协程 → 替代传统异步方案**：协程替代Handler/AsyncTask/RxJava的线程切换，用同步写法实现异步逻辑
+- **Dispatchers → 线程池映射**：IO/Default底层是线程池,Main通过Handler.post到主线程，串联Handler机制
+- **结构化并发 → viewModelScope**：viewModelScope在ViewModel.onCleared()自动取消，避免内存泄漏，串联Jetpack组件
+
+---
+
 ## 1. 概述
 
 Kotlin 协程是一种轻量级的并发解决方案，它允许以同步的方式编写异步代码，避免了回调地狱。协程不是线程，而是运行在线程上的可挂起计算，一个线程可以运行多个协程。本文将深入讲解协程的实现原理、调度机制和异常处理。

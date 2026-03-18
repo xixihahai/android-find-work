@@ -1,5 +1,29 @@
 # OOM 治理
 
+## 速记总结
+
+### 一句话理解
+> OOM 有五大类型——Java堆溢出(最常见)、Native内存溢出、线程创建失败(线程数超限)、FD泄漏(文件描述符超限)、虚拟内存不足(32位进程)。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| Java Heap OOM | 堆内存超限，最常见原因：内存泄漏+大Bitmap+大数组 | ★★★★★ |
+| Native OOM | Native层(so库/图形)内存溢出，不受Java Heap限制但受系统限制 | ★★★★☆ |
+| 线程数OOM | pthread_create失败，线程数超/proc/pid/limits限制(通常500-1000) | ★★★★☆ |
+| FD泄漏OOM | 文件描述符超限(默认1024)，Cursor/Stream/Socket未关闭是主因 | ★★★★★ |
+| 虚拟内存OOM | 32位进程地址空间4GB(用户态3GB)，mmap过多或碎片化导致 | ★★★☆☆ |
+| 线上监控 | LeakCanary(开发期)+线上HPROF裁剪回捞+FD/线程数监控 | ★★★★★ |
+| 兜底策略 | 监控Java Heap水位线，达到阈值主动释放缓存/触发GC/重启进程 | ★★★★☆ |
+
+### 与其他知识的串联
+- **Java Heap OOM → 内存泄漏+Bitmap过大**：先用LeakCanary排泄漏，再用Profiler看Bitmap占比
+- **线程OOM → 线程池(限制线程数)**：用Executors/自定义线程池统一管理，避免随意new Thread
+- **FD泄漏 → Cursor/Stream没关(ContentProvider查询)**：ContentResolver.query后必须close Cursor，IO操作用use{}
+- **监控 → LeakCanary + Profiler + 线上HPROF回捞**：开发期LeakCanary自动检测，线上通过裁剪HPROF文件上报分析
+
+---
+
 ## 1. 概述
 
 OOM（Out Of Memory）是 Android 应用开发中最严重的稳定性问题之一，直接导致应用崩溃。与普通 Crash 不同，OOM 往往是内存问题长期积累的结果，排查难度大、修复成本高。

@@ -1,4 +1,22 @@
 # Service 详解
+## 速记总结
+
+### 一句话理解
+> Service 就像一个**后台管家**，在用户看不到的地方默默干活（播放音乐、下载文件）
+
+### 核心要点速记
+| 要点 | 一句话记忆 |
+|------|-----------|
+| 两种启动方式 | startService（干完活自己走）vs bindService（你走我也走） |
+| 生命周期 | start: onCreate→onStartCommand→onDestroy; bind: onCreate→onBind→onUnbind→onDestroy |
+| 前台服务 | Android 8.0+ 后台限制，长时间任务必须用前台服务+通知 |
+| WorkManager | 现代后台任务首选，替代 JobScheduler/AlarmManager |
+| ANR 超时 | 前台服务 20s，后台服务 200s |
+
+### 与其他组件的关系
+- Service 不是独立线程，默认运行在主线程；耗时操作需要自己开线程或用 IntentService
+
+---
 
 ## 1. 概述
 

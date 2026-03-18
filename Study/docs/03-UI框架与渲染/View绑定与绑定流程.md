@@ -1,5 +1,35 @@
 # View 绑定与绑定流程
 
+## 速记总结
+
+### 一句话理解
+> View 的绘制流程就像**盖房子**：先量尺寸(measure确定多大)→再定位置(layout确定在哪)→最后装修(draw画出来)，从外到内递归执行。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 三大流程 | measure(测量多大)→layout(摆在哪)→draw(画出来) | ★★★★★ |
+| MeasureSpec | 父View对子View的尺寸约束：EXACTLY/AT_MOST/UNSPECIFIED | ★★★★★ |
+| requestLayout vs invalidate | requestLayout 触发 measure+layout+draw；invalidate 只触发 draw | ★★★★☆ |
+| DecorView 层级 | Activity→PhoneWindow→DecorView→ContentView(你的布局) | ★★★★☆ |
+| 自定义View | 重写 onMeasure(量)+onLayout(摆,仅ViewGroup)+onDraw(画) | ★★★★☆ |
+
+### 与其他知识的串联
+```
+View绘制与其他知识的关系
+├── 渲染机制: View三大流程是渲染流水线的"Traversal"阶段
+├── 事件分发: View的触摸区域由layout确定的位置决定
+├── RecyclerView: RV的 LayoutManager 就是在做 measure+layout
+├── Activity: setContentView() 触发第一次 View 树的绑定
+├── WMS: ViewRootImpl 是 View 系统和 WMS 的桥梁
+└── 性能优化: 减少布局层级 = 减少 measure/layout 的递归深度
+```
+
+### 面试答题公式
+> **View 绘制题万能公式**：先说三大流程(measure→layout→draw) → 再说 MeasureSpec 传递机制 → 最后说性能影响(层级深度、requestLayout 代价)
+
+---
+
 ## 1. 概述
 
 View 是 Android UI 系统的核心组件，所有用户界面元素都是 View 或其子类。View 的绑定流程（也称为绘制流程）是 Android 渲染机制的基础，包括三个核心阶段：**measure（测量）**、**layout（布局）** 和 **draw（绘制）**。

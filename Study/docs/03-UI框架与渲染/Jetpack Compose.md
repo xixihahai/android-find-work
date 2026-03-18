@@ -1,5 +1,34 @@
 # Jetpack Compose 深度解析
 
+## 速记总结
+
+### 一句话理解
+> Compose 就像**React Native 的 Android 亲儿子**：用声明式UI描述"界面应该长什么样"，框架自动计算差异并更新，不再需要手动 findViewById 和 setText。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 声明式 vs 命令式 | 声明式：描述结果(UI=f(state))；命令式：描述过程(setText/setColor) | ★★★★★ |
+| Recomposition | 状态变化时只重新执行受影响的 Composable 函数，不是全部重绘 | ★★★★★ |
+| remember/mutableStateOf | remember 跨重组保留值；mutableStateOf 触发重组 | ★★★★☆ |
+| LazyColumn | Compose 版 RecyclerView，自动回收和复用 | ★★★★☆ |
+| 副作用API | LaunchedEffect/DisposableEffect/SideEffect，管理非UI操作 | ★★★☆☆ |
+
+### 与其他知识的串联
+```
+Compose 与其他知识的关系
+├── View体系: Compose 替代 View 体系，但可以通过 AndroidView 互操作
+├── RecyclerView: LazyColumn/LazyRow 是 Compose 对等物
+├── ViewModel/LiveData: Compose 用 collectAsStateWithLifecycle 观察 Flow
+├── 渲染机制: Compose 有自己的渲染流程(Composition→Layout→Drawing)
+└── 架构: Compose + MVI 是目前最推荐的架构组合
+```
+
+### 面试答题公式
+> **Compose 题万能公式**：先说核心理念(声明式, UI=f(state)) → 再说重组机制(智能diff, Slot Table) → 最后说与传统View的对比和迁移策略
+
+---
+
 ## 1. 概述
 
 ### 1.1 什么是 Jetpack Compose

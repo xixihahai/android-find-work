@@ -1,4 +1,22 @@
 # ContentProvider 详解
+## 速记总结
+
+### 一句话理解
+> ContentProvider 就像一个**数据库的 REST API**，通过 URI 对外暴露数据的增删改查
+
+### 核心要点速记
+| 要点 | 一句话记忆 |
+|------|-----------|
+| 核心方法 | query/insert/update/delete 对应 CRUD |
+| URI 格式 | content://authority/path/id |
+| 权限控制 | readPermission/writePermission + 临时授权 grantUriPermission |
+| FileProvider | 安全分享文件的标准方式（替代 file:// URI） |
+| 初始化时机 | ContentProvider.onCreate() 在 Application.onCreate() 之前执行 |
+
+### 与其他组件的关系
+- ContentProvider 通过 Binder 实现跨进程；是 App Startup 库的底层机制
+
+---
 
 ## 1. 概述
 

@@ -1,5 +1,28 @@
 # Kotlin Flow
 
+## 速记总结
+
+### 一句话理解
+> Flow 就像水管——上游(emit)发送数据，中间可以加过滤器(map/filter)，下游(collect)接收消费，是冷的(没人接就不流)。StateFlow 是热的水龙头(随时有水)。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| 冷流vs热流 | Flow冷流(collect才执行),StateFlow/SharedFlow热流(一直活跃) | ★★★★★ |
+| StateFlow | 有初始值,replay=1,值相同不重复发射,替代LiveData | ★★★★★ |
+| SharedFlow | 无初始值,可配置replay/buffer,替代EventBus | ★★★★☆ |
+| 操作符 | map/filter/flatMapLatest/combine/zip/debounce | ★★★★☆ |
+| 背压处理 | buffer(缓冲)/conflate(只取最新)/collectLatest(取消旧的) | ★★★★☆ |
+| flowOn | 改变上游执行线程,不影响下游(collect所在线程) | ★★★★☆ |
+| Flow vs LiveData | Flow功能更强(操作符丰富),LiveData更简单(自动管理生命周期) | ★★★★★ |
+
+### 与其他知识的串联
+- **Flow vs LiveData → UI层选择**：StateFlow替代LiveData给UI层，但需配合repeatOnLifecycle管理生命周期
+- **StateFlow → MVVM/MVI架构**：ViewModel暴露StateFlow给UI层，配合sealed class表示UI状态
+- **SharedFlow → 事件总线**：SharedFlow(replay=0)替代EventBus/LiveData处理一次性事件，避免粘性事件问题
+
+---
+
 ## 1. 概述
 
 Kotlin Flow 是 Kotlin 协程库中用于处理异步数据流的 API。它是冷流（Cold Stream），只有在收集时才会执行。Flow 提供了丰富的操作符，可以方便地进行数据转换、过滤、组合等操作。本文将深入讲解 Flow 的原理、StateFlow/SharedFlow 的使用，以及与 LiveData、RxJava 的对比。

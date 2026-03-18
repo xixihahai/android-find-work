@@ -1,4 +1,22 @@
 # BroadcastReceiver 详解
+## 速记总结
+
+### 一句话理解
+> BroadcastReceiver 就像一个**收音机**，监听系统或应用发出的广播信号并响应
+
+### 核心要点速记
+| 要点 | 一句话记忆 |
+|------|-----------|
+| 静态 vs 动态 | 静态：Manifest 注册，App 未启动也能收到；动态：代码注册，随组件生命周期 |
+| Android 8.0 限制 | 大部分隐式广播不能静态注册（省电） |
+| 有序广播 | 按优先级传递，可以中断（abortBroadcast）和修改数据 |
+| 本地广播 | LocalBroadcastManager（已废弃），替代方案：LiveData / Flow |
+| 执行限制 | onReceive() 在主线程执行，不能超过 10s，否则 ANR |
+
+### 与其他组件的关系
+- 广播底层通过 AMS 分发；注册接收器需要 IntentFilter
+
+---
 
 ## 1. 概述
 

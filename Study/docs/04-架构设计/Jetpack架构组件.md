@@ -1,5 +1,28 @@
 # Jetpack 架构组件深度解析
 
+## 速记总结
+
+### 一句话理解
+> Jetpack 四件套——Lifecycle(自动感知生命周期)、ViewModel(配置变更不丢数据)、LiveData(自动通知UI更新)、SavedStateHandle(进程死亡也能恢复)。
+
+### 核心知识点速记
+| 知识点 | 一句话记忆 | 面试频率 |
+|--------|-----------|---------|
+| Lifecycle | 观察者模式,LifecycleOwner派发事件,Observer感知状态 | ★★★★★ |
+| ViewModel存活原理 | ViewModelStore存在NonConfigurationInstances中,配置变更时保留 | ★★★★★ |
+| LiveData粘性事件 | observer的version < LiveData的version就会派发,新观察者收到旧值 | ★★★★★ |
+| SavedStateHandle | 基于onSaveInstanceState,进程死亡恢复数据,有大小限制 | ★★★★☆ |
+| ViewModel作用域 | Activity级/Fragment级/NavGraph级,共享ViewModel用activityViewModels() | ★★★★☆ |
+| DataBinding | 编译时生成Binding类,双向绑定用@={}语法 | ★★★☆☆ |
+| Room | 编译时验证SQL,DAO返回Flow/LiveData实现响应式查询 | ★★★★☆ |
+
+### 与其他知识的串联
+- **Lifecycle → LeakCanary检测泄漏**：LeakCanary利用Lifecycle感知Activity销毁时机，检查弱引用是否被回收
+- **ViewModel存活机制 → Activity重建流程**：配置变更时Activity.onRetainNonConfigurationInstance()保留ViewModelStore，与Activity生命周期深度关联
+- **LiveData粘性事件 → 面试高频坑**：解决方案有SingleLiveEvent、Event包装类、SharedFlow(replay=0)替代
+
+---
+
 ## 1. 概述
 
 Jetpack 架构组件是 Google 推出的一套帮助开发者构建健壮、可测试、可维护应用的库集合。核心组件包括：
