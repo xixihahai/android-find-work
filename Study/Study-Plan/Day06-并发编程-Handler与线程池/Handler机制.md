@@ -242,7 +242,6 @@ public static void loop() {
     final MessageQueue queue = me.mQueue;
     
     // 确保线程身份是本地进程
-    Binder.clearCallingIdentity();
     final long ident = Binder.clearCallingIdentity();
     
     // 无限循环
@@ -434,7 +433,7 @@ public final class Message implements Parcelable {
     
     // 回收消息到池中
     void recycleUnchecked() {
-        // 清除所有状态
+        // 标记为正在使用（在池中时保持此标记，防止被重复回收）
         flags = FLAG_IN_USE;
         what = 0;
         arg1 = 0;

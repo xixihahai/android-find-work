@@ -1174,11 +1174,11 @@ class CoroutineTestExample {
 **答案要点**：
 - **Dispatchers.Default**：
   - 用于 CPU 密集型任务
-  - 线程数等于 CPU 核心数
+  - 线程数等于 max(2, CPU 核心数)
   - 适合计算、排序等
 - **Dispatchers.IO**：
   - 用于 IO 密集型任务
-  - 线程数最多 64 个
+  - 线程数最多 max(64, CPU 核心数) 个
   - 适合网络请求、文件读写等
 - **共享线程池**：两者共享线程池，但有不同的并行度限制
 

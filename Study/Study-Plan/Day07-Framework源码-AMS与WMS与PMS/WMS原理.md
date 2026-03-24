@@ -597,7 +597,7 @@ dialog.show()
 │  2. 没有有效的 Window Token                                     │
 │  3. WMS 验证 Token 失败 → BadTokenException                     │
 │                                                                 │
-│  💡 本质：Dialog 是子窗口/应用窗口，需要父窗口的 Token 验证       │
+│  💡 本质：Dialog 是应用窗口，需要父窗口的 Token 验证               │
 │     Application 不是窗口，没有 Token                              │
 │                                                                 │
 │  ⚠️ 解决方案（如果必须用 Application Context）：                  │
@@ -802,10 +802,10 @@ fun getWindowType(): Int {
 
 **答案要点**：
 - **应用窗口（1-99）**：Activity 窗口，需要 Activity Token
-- **子窗口（1000-1999）**：PopupWindow、Dialog，必须依附于父窗口，需要父窗口 Token
+- **子窗口（1000-1999）**：PopupWindow 等，必须依附于父窗口，需要父窗口 Token
 - **系统窗口（2000-2999）**：Toast、状态栏、导航栏、悬浮窗，需要系统权限，不需要 Activity Token
 
-> **记忆要点**：数字越大层级越高。应用窗口靠 Token，子窗口靠父亲，系统窗口靠权限。
+> **记忆要点**：数字越大层级越高。应用窗口靠 Token，子窗口靠父亲，系统窗口靠权限。Dialog 是应用窗口类型，需要 Activity Token。
 
 ### 问题3：Activity、Window、DecorView、ViewRootImpl 的关系是什么？
 

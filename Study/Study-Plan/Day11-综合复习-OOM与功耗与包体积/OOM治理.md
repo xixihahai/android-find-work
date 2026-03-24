@@ -2173,15 +2173,16 @@ fun checkNativeMemory() {
    - 容易触发 Java Heap OOM
 
 2. **Android 8.0 之后**：
-   - 引入 Hardware Bitmap，像素数据存储在 Native 内存
+   - 所有 Bitmap 像素数据改为存储在 Native Heap（不再占用 Java Heap）
+   - 新增 Hardware Bitmap（`Bitmap.Config.HARDWARE`），像素存储在 GPU 内存
    - 不占用 Java Heap 空间
    - 但仍可能导致 Native OOM 或被 LMK 杀死
 
 3. **源码变化**：
 ```java
-// Android 8.0+ Bitmap 创建
-// 默认使用 HARDWARE 配置，像素存储在 GPU 内存
-Bitmap.Config.HARDWARE  // 新增配置
+// Android 8.0+ Bitmap 像素数据分配在 Native Heap
+// 另外新增 HARDWARE 配置，像素直接存储在 GPU 内存
+Bitmap.Config.HARDWARE  // 新增配置，Glide 等框架默认使用
 ```
 
 4. **注意事项**：

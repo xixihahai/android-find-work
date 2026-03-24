@@ -732,11 +732,11 @@ Compose 编译器是一个 Kotlin 编译器插件，它在编译时对 `@Composa
 ```kotlin
 /**
  * $changed 参数使用位运算来追踪参数变化状态
- * 每个参数占用 3 位：
- * - 00: 未知（需要比较）
- * - 01: 相同（可以跳过）
- * - 10: 不同（需要重组）
- * - 11: 静态（编译时常量）
+ * 每个参数使用若干位来编码状态：
+ * - 0b00: 未知（需要在运行时比较）
+ * - 0b01: 相同（可以跳过重组）
+ * - 0b10: 不同（需要重组）
+ * - 0b11: 静态（编译时常量，永远不变）
  */
 
 // 示例：两个参数的函数
@@ -1192,17 +1192,11 @@ class MyActivity : AppCompatActivity() {
     }
 }
 
-// ViewCompositionStrategy 选项
-enum class ViewCompositionStrategy {
-    // 当 View 从窗口分离时释放 Composition
-    DisposeOnDetachedFromWindow,
-    
-    // 当 ViewTreeLifecycleOwner 销毁时释放
-    DisposeOnViewTreeLifecycleDestroyed,
-    
-    // 当 Lifecycle 销毁时释放
-    DisposeOnLifecycleDestroyed(lifecycle)
-}
+// ViewCompositionStrategy 选项 (接口，非枚举)
+// 常用策略：
+// DisposeOnDetachedFromWindow - 当 View 从窗口分离时释放 Composition（默认）
+// DisposeOnViewTreeLifecycleDestroyed - 当 ViewTreeLifecycleOwner 销毁时释放（Fragment 推荐）
+// DisposeOnLifecycleDestroyed(lifecycle) - 当指定 Lifecycle 销毁时释放
 ```
 
 
@@ -1788,11 +1782,11 @@ fun Greeting(name: String, $composer: Composer, $changed: Int) {
 ```
 
 **4. $changed 位运算**：
-- 每个参数占 3 位
-- `00`: 未知，需要比较
-- `01`: 相同，可跳过
-- `10`: 不同，需重组
-- `11`: 静态常量
+- 每个参数使用若干位编码变化状态
+- `0b00`: 未知，需要运行时比较
+- `0b01`: 相同，可跳过
+- `0b10`: 不同，需重组
+- `0b11`: 静态常量
 
 ---
 

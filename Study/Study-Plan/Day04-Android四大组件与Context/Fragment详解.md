@@ -603,7 +603,7 @@ class MainActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
         viewPager.adapter = ViewPagerAdapter(this)
         
-        // 设置预加载页面数（默认为 1）
+        // 设置预加载页面数（ViewPager2 默认为 OFFSCREEN_PAGE_LIMIT_DEFAULT = -1，即不预加载）
         viewPager.offscreenPageLimit = 1
         
         // 配合 TabLayout
@@ -814,7 +814,7 @@ ConfirmDialogFragment.newInstance("删除", "确定要删除吗？")
 - **实现方式**：
   - 在 onResume 或 onViewCreated 中加载数据
   - 使用 setMaxLifecycle() 控制最大生命周期状态
-- **offscreenPageLimit**：控制预加载页面数，默认为 1
+- **offscreenPageLimit**：控制预加载页面数，ViewPager2 默认为 -1（不预加载，仅当前页）
 
 ### 问题6：为什么 Fragment 需要无参构造函数？
 

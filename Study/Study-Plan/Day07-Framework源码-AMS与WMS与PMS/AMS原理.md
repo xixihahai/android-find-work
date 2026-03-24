@@ -456,7 +456,7 @@ class Task extends TaskFragment {
                     │                             │
                     │  1. 根据组件状态计算每个进程  │
                     │     的 ADJ 值                │
-                    │  2. 通过 /proc/pid/oom_adj   │
+                    │  2. 通过 /proc/pid/oom_score_adj│
                     │     写入内核                  │
                     └──────────────┬──────────────┘
                                    │ 写入 ADJ 值

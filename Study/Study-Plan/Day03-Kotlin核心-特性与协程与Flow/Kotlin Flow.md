@@ -225,7 +225,7 @@ Kotlin Flow 是 Kotlin 协程库中用于处理异步数据流的 API。它是�
 │  │  2. 冷流特性，按需执行                                          │   │
 │  │  3. 结构化并发，自动取消                                        │   │
 │  │  4. 操作符丰富，类似 RxJava                                     │   │
-│  │  5. 依赖小，是 Kotlin 标准库的一部分                            │   │
+│  │  5. 依赖小，是 kotlinx.coroutines 库的一部分                    │   │
 │  └─────────────────────────────────────────────────────────────────┘   │
 │                                                                         │
 │  LiveData 的优势:                                                       │
@@ -326,17 +326,15 @@ public inline fun <T, R> Flow<T>.transform(
 
 /**
  * flowOn 操作符 - 切换上游执行上下文
+ * 注意：flowOn 内部并非简单使用 withContext，
+ * 因为在 flow{} 中使用 withContext 会违反 context preservation 约束。
+ * 实际实现是通过创建一个单独的协程来收集上游，并通过 channel 传递数据到下游。
+ * 以下为简化的概念示意（非真实实现）：
  */
 public fun <T> Flow<T>.flowOn(context: CoroutineContext): Flow<T> {
-    return flow {
-        // 在指定上下文中收集上游
-        withContext(context) {
-            collect { value ->
-                // 发射到下游 (在原上下文中)
-                emit(value)
-            }
-        }
-    }
+    // 实际实现使用 ChannelFlow，在指定 context 的协程中收集上游，
+    // 通过 channel 将数据发送到下游协程（保持下游原有 context）
+    return ChannelFlowOperator(this, context)
 }
 
 /**

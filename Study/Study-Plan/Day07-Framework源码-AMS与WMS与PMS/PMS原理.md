@@ -159,7 +159,7 @@ public PackageManagerService(Injector injector, boolean factoryTest,
 │                         ▼                                                │
 │  ⑤ 签名验证（APK Signature Scheme）                                      │
 │  ┌──────────────────────────────────────────────────┐                    │
-│  │ • v1: JAR 签名（Android 7.0 以下）                │                    │
+│  │ • v1: JAR 签名（最初的签名方案）                   │                    │
 │  │ • v2: APK 签名方案（Android 7.0+，整个 APK 校验） │                    │
 │  │ • v3: 支持密钥轮换（Android 9.0+）               │                    │
 │  │ • v4: 增量安装签名（Android 11+）                 │                    │
@@ -433,9 +433,9 @@ private static boolean intentFilterMatches(IntentFilter filter, Intent intent,
 | `codePath` | APK 安装路径 | `/data/app/com.example.app-1` |
 | `nativeLibraryPath` | native .so 库路径 | `/data/app/com.example.app-1/lib` |
 | `primaryCpuAbi` | CPU 架构 | `arm64-v8a` / `armeabi-v7a` |
-| `ft` | APK 文件最后修改时间 (firstInstallTime 的 hex) | `18a1b2c3d4e` |
-| `it` | 首次安装时间 (installTime) | `18a1b2c3d4e` |
-| `ut` | 最后更新时间 (updateTime) | `18a1b2c3d4e` |
+| `ft` | APK 文件最后修改时间 (hex) | `18a1b2c3d4e` |
+| `it` | 首次安装时间 (hex) | `18a1b2c3d4e` |
+| `ut` | 最后更新时间 (hex) | `18a1b2c3d4e` |
 | `version` | versionCode | `1` |
 | `userId` | 分配的 Linux UID（10000+） | `10123` → 对应 `u0_a123` |
 | `publicFlags` | 公开标志位（debuggable、系统app等） | `944291396` |
@@ -662,11 +662,11 @@ fun queryActivities(context: Context, intent: Intent): List<ResolveInfo> {
 │  Android 运行时演进：                                                    │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐                              │
 │  │ Dalvik   │→ │ ART      │→ │ ART +    │                              │
-│  │ (JIT)    │  │ (AOT)    │  │ Profile  │                              │
+│  │ (解释+JIT)│  │ (AOT)    │  │ Profile  │                              │
 │  │ 4.4 以前 │  │ 5.0~6.x  │  │ 7.0+     │                              │
 │  └──────────┘  └──────────┘  └──────────┘                              │
 │                                                                         │
-│  • Dalvik：JIT（即时编译），运行时翻译，启动快但运行慢                    │
+│  • Dalvik：解释执行+JIT（2.2起），运行时翻译，安装快但运行较慢           │
 │  • ART (5.0)：AOT（预编译），安装时全量编译，安装慢但运行快               │
 │  • ART (7.0+)：混合模式                                                 │
 │    - 安装时只做轻量级 verify                                             │

@@ -667,7 +667,7 @@ class MessengerActivity : AppCompatActivity() {
 
 ```kotlin
 // Bundle 通过 Binder 传输，有大小限制
-// Binder 事务缓冲区大小约 1MB（所有进程共享）
+// Binder 事务缓冲区大小约 1MB（每个进程独立，该进程所有 Binder 事务共享此缓冲区）
 // 单次传输建议不超过 500KB
 
 // ❌ 错误：传输大数据
@@ -759,7 +759,7 @@ val intent = Intent(this, TargetActivity::class.java).apply {
 ### 问题7：Bundle 传输数据有什么限制？
 
 **答案要点：**
-- Binder 事务缓冲区大小约 **1MB**（所有进程共享）
+- Binder 事务缓冲区大小约 **1MB**（每个进程独立，进程内所有事务共享）
 - 单次传输建议不超过 **500KB**
 - 超过限制会抛出 `TransactionTooLargeException`
 - **解决方案**：

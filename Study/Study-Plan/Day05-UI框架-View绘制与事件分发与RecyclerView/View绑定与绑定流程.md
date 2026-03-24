@@ -374,7 +374,7 @@ Draw 过程将 View 绘制到屏幕上，是绑定流程的最后一步：
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    View.draw() 六个步骤                          │
+│                    View.draw() 步骤                              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  Step 1: drawBackground(canvas)                                 │
@@ -397,8 +397,12 @@ Draw 过程将 View 绘制到屏幕上，是绑定流程的最后一步：
 │          恢复 Canvas 图层                                        │
 │          │                                                      │
 │          ▼                                                      │
-│  Step 6: drawForeground(canvas)                                 │
+│  Step 6: onDrawForeground(canvas)                               │
 │          绘制前景、滚动条等装饰                                   │
+│          │                                                      │
+│          ▼                                                      │
+│  Step 7: drawDefaultFocusHighlight(canvas)                      │
+│          绘制默认焦点高亮 (API 26+)                               │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -1713,7 +1717,7 @@ View 的绑定流程由 `ViewRootImpl.performTraversals()` 触发，包含三个
 3. **Draw（绘制）**
    - 作用：将 View 绘制到屏幕上
    - 入口：`View.draw()` → `View.onDraw()`
-   - 六个步骤：背景 → 保存图层 → 内容 → 子 View → 渐变边缘 → 前景装饰
+   - 主要步骤：背景 → 保存图层 → 内容(onDraw) → 子 View(dispatchDraw) → 渐变边缘 → 前景装饰 → 焦点高亮
    - 硬件加速：使用 DisplayList 和 RenderThread 提升性能
 
 **流程图：**
